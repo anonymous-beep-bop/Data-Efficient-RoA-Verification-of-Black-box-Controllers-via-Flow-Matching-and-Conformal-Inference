@@ -19,6 +19,10 @@
   <link rel="stylesheet" href="static/css/index.css">
 
   <script defer src="static/js/fontawesome.all.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
 </head>
 
 <body>
@@ -107,17 +111,17 @@
         <div class="column">
           <img src="static/images/pendulum.png" alt="Pendulum" style="max-height: 240px;" />
           <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Pendulum (2D)</p>
-          <p class="is-size-7">State: (&theta;, &theta;&#x0307;)<br>LQR control</p>
+          <p class="is-size-7">State: $(\theta, \dot{\theta})$<br>LQR control</p>
         </div>
         <div class="column">
           <img src="static/images/cartpole.png" alt="Cartpole" style="max-height: 240px;" />
           <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Cartpole (4D)</p>
-          <p class="is-size-7">State: (q, q&#x0307;, &theta;, &theta;&#x0307;)<br>LQR control</p>
+          <p class="is-size-7">State: $(q, \dot{q}, \theta, \dot{\theta})$<br>LQR control</p>
         </div>
         <div class="column">
           <img src="static/images/quad2d_v2.png" alt="Planar Quadrotor" style="max-height: 240px;" />
           <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Planar Quadrotor (6D)</p>
-          <p class="is-size-7">State: (x, x&#x0307;, y, y&#x0307;, &theta;, &theta;&#x0307;)<br>Learned RL policy</p>
+          <p class="is-size-7">State: $(x, \dot{x}, y, \dot{y}, \theta, \dot{\theta})$<br>Learned RL policy</p>
         </div>
         <div class="column">
           <img src="static/images/quad3d_v2.png" alt="Spatial Quadrotor" style="max-height: 240px;" />
