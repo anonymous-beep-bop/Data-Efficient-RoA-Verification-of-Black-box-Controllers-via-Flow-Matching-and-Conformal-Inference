@@ -129,8 +129,14 @@ body {
   background: #000000;
 }
 
-.eql-cntrb { 
+.eql-cntrb {
   font-size: smaller;
+}
+
+code.roa {
+  background: none;
+  padding: 0;
+  color: #3273dc;
 }
 
 

@@ -3,118 +3,36 @@
 
 <head>
   <meta charset="utf-8">
-  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
-  <!-- Replace the content tag with appropriate information -->
-  <meta name="description" content="DESCRIPTION META TAG">
-  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG" />
-  <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG" />
-  <meta property="og:url" content="URL OF THE WEBSITE" />
-  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
-  <meta property="og:image" content="static/image/your_banner_image.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-
-
-  <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
-  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
-  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
-  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <!-- Keywords for your paper to be indexed by-->
-  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="description" content="Data-Efficient RoA Verification of Black-box Controllers via Flow Matching and Conformal Inference">
+  <meta property="og:title" content="Data-Efficient RoA Verification of Black-box Controllers via Flow Matching and Conformal Inference" />
+  <meta property="og:description" content="A framework for verifying Region of Attraction of black-box controllers using conditional flow matching, adaptive sampling, and conformal inference." />
+  <meta name="keywords" content="Region of Attraction, RoA, Flow Matching, Conformal Inference, Black-box Controllers, Verification, Robotics">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
-  <title>SDSeg</title>
+  <title>Data-Efficient RoA Verification via Flow Matching and Conformal Inference</title>
   <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
   <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="static/css/index.css">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
   <script defer src="static/js/fontawesome.all.min.js"></script>
-  <script src="static/js/bulma-carousel.min.js"></script>
-  <script src="static/js/bulma-slider.min.js"></script>
-  <script src="static/js/index.js"></script>
 </head>
 
 <body>
 
-
+  <!-- Title / Hero -->
   <section class="hero">
     <div class="hero-body">
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
             <h1 class="title is-1 publication-title">
-              Title of the paper</h1>
+              Data-Efficient RoA Verification of Black-box&nbsp;Controllers<br>via Flow Matching and Conformal Inference</h1>
             <div class="is-size-5 publication-authors">
-              <!-- Paper authors -->
-              <span class="author-block">
-                <a href="https://lin-tianyu.github.io/" target="_blank">Tianyu Lin</a><sup>1*</sup></span>
-              <!-- <span class="author-block">
-                <a target="_blank">Zhiguang Chen</a><sup>2</sup>,</span>
-              <span class="author-block">
-                <a href="https://github.com/zzzyzh" target="_blank">Zhonghao Yan</a><sup>3</sup>,</span>
-              <span class="author-block">
-                <a href="https://github.com/yuweijiang" target="_blank">Weijiang Yu</a><sup>2*</sup>,</span>
-              <span class="author-block">
-                <a target="_blank">Fudan Zheng</a><sup>2*</sup></span> -->
-            </div>
-            <div class="is-size-5 publication-authors">
-              <span class="author-block">
-                <sup>1</sup>Institution<br>
-                <!-- {<sup>1</sup>School of Biomedical Engineering, 
-                <sup>2</sup>School of Computer Science and Engineering}, Sun Yat-sen University<br>
-                <sup>3</sup>International School, Beijing University of Posts and Telecommunications -->
-              </span>
-              <span class="eql-cntrb"><small><br><sup>*</sup>Corresponding Author</small></span><br>
-              <span class="author-block" style="background: linear-gradient(to right, rgb(255, 0, 0), rgb(0, 255, 0), rgb(0, 0, 0)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;line-height: 1.5;"><b>Conference/Journal Name</b></span>
-            </div>
-
-
-            <div class="column has-text-centered">
-              <div class="publication-links">
-            <!-- ArXiv abstract Link -->
-            <span class="link-block">
-              <a href="https://arxiv.org/abs/2406.18361" target="_blank"
-                class="external-link button is-normal is-rounded is-dark">
-                <span class="icon">
-                  <i class="ai ai-arxiv"></i>
-                </span>
-                <span>ArXiv</span>
-              </a>
-            </span>
-
-              <!-- Arxiv PDF link -->
-              <span class="link-block">
-                <a href="https://arxiv.org/pdf/2406.18361.pdf" target="_blank"
-                  class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                    <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Arxiv Paper</span>
-                </a>
-              </span>
-
-                <!-- Github link -->
-                <span class="link-block">
-                  <a href="https://github.com/lin-tianyu/Stable-Diffusion-Seg" target="_blank"
-                    class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="fab fa-github"></i>
-                    </span>
-                    <span>Code</span>
-                  </a>
-                </span>
-
-              </div>
+              <span class="author-block">Anonymous submission</span>
             </div>
           </div>
         </div>
@@ -122,252 +40,188 @@
     </div>
   </section>
 
-
-  <!-- Teaser-->
+  <!-- Teaser Figure -->
   <section class="hero teaser">
-    <div class="container is-max-desktop">
-      <div class="hero-body">
-        <img src="static/images/framework-v2.jpg" alt="MY ALT TEXT" , width="700" />
-        <h4 class="subtitle has-text-centered">The overview of the proposed method.</h4>
+    <div class="container is-max-widescreen">
+      <div class="hero-body has-text-centered">
+        <img src="static/images/flagship_horiz.png" alt="RoA identification comparison on 4D Cartpole system" style="max-width: 100%;" />
+        <h2 class="subtitle has-text-centered" style="margin-top: 1rem;">
+          <code class="roa">RoA</code> identification on two 2D slices of a 4D Cartpole system. Left to right: Ground Truth <code class="roa">RoA</code>, Adaptive (Ours), Non-adaptive (Ours), and DeepReach baseline. The adaptive method closely recovers the ground-truth <code class="roa">RoA</code> with well-calibrated uncertainty at the boundary.
+        </h2>
       </div>
     </div>
   </section>
-  <!-- End teaser -->
 
+  <!-- Abstract -->
   <section class="section hero is-light">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column is-four-fifths">
-          <h2 class="title is-2" style="background: linear-gradient(to right,  indigo, indigo, skyblue, indigo, indigo); -webkit-background-clip: text; -webkit-text-fill-color: transparent;line-height: 1.5;">
-            Highlights</h2>
-        </div>
-      </div>
-      <p>
-        🌟 Highlights are the summary of the proposed work. They can be contributions in the paper or preferred key points.<br>
-        🌟 Point 2
-        
-      </p>
-    </div>
-  </section>
-
-  <section class="section hero">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-2" style="background: linear-gradient(to right,  indigo, indigo, skyblue, indigo, indigo); -webkit-background-clip: text; -webkit-text-fill-color: transparent;line-height: 1.5;">
-            Motivation</h2>
-        <h5 class="title is-5" style="text-align: center;">
-          Using a single sentence to summarize the motivation of the paper.
-        </h5>
-
-        <div class="columns is-centered">
-        <!-- reenact. -->
-        <div class="column">
-          <div class="content">
-            <h4 class="title is-5" style="text-align: center;">🔒 Challenges</h4>
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
             <p>
-            (1) blablabla<br>
-            (2) blablabla
+              Verification of robot controllers is important for ensuring safe and reliable robot operation. It can involve the characterization of a controller's Region of Attraction (<code class="roa">RoA</code>), i.e., the initial states that lead to a successful outcome. This is challenging, however, for black-box, learned controllers where analytical models are unavailable. In such scenarios, verification is conducted using only trajectory data, making data efficiency critical as each data point represents a costly physical experiment. To address this, this paper presents a framework that integrates three components: (1) a Conditional Flow Matching (CFM) model that learns the distribution of final states from initial conditions, capturing multi-modal outcome distributions that naturally express uncertainty near the boundary between success and failure regions; (2) a probabilistic classification mechanism that interprets the learned distribution via optimized decision thresholds to categorize states into the <code class="roa">RoA</code>, the failure region, or an uncertain region where the model cannot commit to an outcome; and (3) an adaptive sampling strategy that concentrates trajectory collection on the uncertain region to reduce it with fewer rollouts than uniform sampling. The resulting predictions are certified via conformal inference to provide finite-sample coverage guarantees. Experiments on benchmark systems ranging from a 2D pendulum to a 13D quadrotor demonstrate that the proposed framework achieves high verification accuracy with low uncertainty compared to existing methods, and that adaptive sampling further improves data efficiency over the non-adaptive variant.
             </p>
           </div>
         </div>
-        <!--/ reenact -->
-        <!-- swap. -->
-        <div class="column">
-          <h4 class="title is-5" style="text-align: center;">🔑 Solutions</h4>
-          <div class="columns is-centered">
-            <div class="column content">
-              <p>
-              <!-- <br> -->
-            (1) blablabla<br>
-            (2) blablabla
-              </p>
-            </div>
-          </div>
-        </div>
-        <!--/ swap. -->
-      </div>
-
-            <div class="hero-body">
-              <img src="static/images/LatentRep.jpg" alt="MY ALT TEXT" , width="1000" />
-              <h4 class="subtitle has-text-centered"><b>Caption of the figure.</b></h4>
-              Detailed descriptions.
-            </div>
-        </div>
       </div>
     </div>
   </section>
 
-  <section class="section hero is-light">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-2" style="background: linear-gradient(to right,  indigo, indigo, skyblue, indigo, indigo); -webkit-background-clip: text; -webkit-text-fill-color: transparent;line-height: 1.5;">
-            Module 1</h2>
-            <h5 class="title is-5" style="text-align: center;">
-              Single sentence to summarize the first module of the paper.
-            </h5>
-            <div class="hero-body">
-              <img src="static/images/ReverseCurve.png" alt="MY ALT TEXT" , width="900" />
-              <h4 class="subtitle has-text-centered"><b>Caption of the figure.</b></h4>
-            </div>
-            <!-- <div class="hero-body">
-              <img src="static/images/ReverseProcess.jpeg" alt="MY ALT TEXT" , width="1000" />
-              <h4 class="subtitle has-text-centered">Visualization of the predicted probability maps in
-                reverse process.</h4>
-            </div> -->
-        </div>
-      </div>
-    </div>
-
-    <!-- Video carousel -->
-   <section class="hero is-small">
-   <div class="hero-body">
-     <div class="container">
-       <div id="results-carousel" class="carousel results-carousel">
-         <div class="item item1" style="text-align:center;">
-           <img src="static/images/ReverseProcess-1.png" alt="MY ALT TEXT" , width="700" />
-         </div>
-         <div class="item item2" style="text-align:center;">
-           <img src="static/images/ReverseProcess-2.png" alt="MY ALT TEXT" , width="700" />
-         </div>
-       </div>
-     </div>
-   </div>
-   <h4 class="subtitle has-text-centered"><b>Showing rolling images here.</b></h4>
- </section> 
-   <!-- End video carousel -->
-  </section>
-
+  <!-- Method Overview -->
   <section class="section hero">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column is-four-fifths">
-          <h2 class="title is-2" style="background: linear-gradient(to right,  indigo, indigo, skyblue, indigo, indigo); -webkit-background-clip: text; -webkit-text-fill-color: transparent;line-height: 1.5;">
-            Module 2</h2>
-            <h5 class="title is-5" style="text-align: center;">
-            Single sentence to summarize the second module of the paper.
-            </h5>
-            <p style="text-align: left;">
-              <b>👉 Key point 1</b>: bnlablabla.<br>
-              <b>👉 Key point 2</b>: blablabla.
-
+          <h2 class="title is-3">Method Overview</h2>
+          <div class="content has-text-justified">
+            <p>
+              Our framework estimates the Region of Attraction (<code class="roa">RoA</code>) of a black-box controller through three integrated components. Each initial state is classified into one of three labels: <code>&lt;Suc&gt;</code> (the state lies within the <code class="roa">RoA</code> and the controller succeeds), <code>&lt;Fail&gt;</code> (the state lies outside the <code class="roa">RoA</code> and the controller fails), or <code>&lt;Unc&gt;</code> (the model cannot confidently commit to an outcome).
             </p>
-            <div class="hero-body">
-              <img src="static/images/StabilityEvaluationV4.jpeg" alt="MY ALT TEXT" , width="1000" />
-              <h2 class="subtitle has-text-centered"><b>Caption of the figure.</b></h2>
-            </div>
+            <ol>
+              <li><b>Generative Final-State Prediction:</b> A Conditional Flow Matching (CFM) model learns the distribution of terminal states from initial conditions. By capturing multi-modal outcomes, the model naturally expresses uncertainty near the boundary between <code>&lt;Suc&gt;</code> and <code>&lt;Fail&gt;</code> regions.</li>
+              <li><b>Probabilistic Classification with Optimized Thresholds:</b> Monte Carlo samples from the learned distribution are evaluated against success criteria to estimate outcome probabilities. A dual-threshold decision rule classifies each state as <code>&lt;Suc&gt;</code>, <code>&lt;Fail&gt;</code>, or <code>&lt;Unc&gt;</code>, with thresholds optimized to balance accuracy and the size of the <code>&lt;Unc&gt;</code> region.</li>
+              <li><b>Uncertainty-Guided Adaptive Sampling:</b> The <code>&lt;Unc&gt;</code> region guides data collection, concentrating costly trajectory rollouts on boundary states where the classifier cannot commit, progressively refining the <code class="roa">RoA</code> characterization.</li>
+            </ol>
+            <p>
+              Finally, a conformal inference layer certifies all predictions with finite-sample coverage guarantees.
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Benchmark Systems -->
   <section class="section hero is-light">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column is-four-fifths">
-          <h2 class="title is-2" style="background: linear-gradient(to right,  indigo, indigo, skyblue, indigo, indigo); -webkit-background-clip: text; -webkit-text-fill-color: transparent;line-height: 1.5;">
-            Other Qualitative Analysis</h2>
-            <div class="hero-body">
-              <img src="static/images/Conditioner.png" alt="MY ALT TEXT" , width="900" />
-              <h2 class="subtitle has-text-centered"><b>Caption of the figure.</b></h2>
-                  Detailed descriptions.
-            </div>
+          <h2 class="title is-3">Benchmark Systems</h2>
+          <div class="content">
+            <p>We evaluate on four dynamical systems of increasing dimensionality, from a 2D pendulum to a 13D spatial quadrotor.</p>
+          </div>
+        </div>
+      </div>
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <img src="static/images/pendulum.png" alt="Pendulum" style="max-height: 240px;" />
+          <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Pendulum (2D)</p>
+          <p class="is-size-7">State: (&theta;, &theta;&#x0307;)<br>LQR control</p>
+        </div>
+        <div class="column">
+          <img src="static/images/cartpole.png" alt="Cartpole" style="max-height: 240px;" />
+          <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Cartpole (4D)</p>
+          <p class="is-size-7">State: (q, q&#x0307;, &theta;, &theta;&#x0307;)<br>LQR control</p>
+        </div>
+        <div class="column">
+          <img src="static/images/quad2d_v2.png" alt="Planar Quadrotor" style="max-height: 240px;" />
+          <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Planar Quadrotor (6D)</p>
+          <p class="is-size-7">State: (x, x&#x0307;, y, y&#x0307;, &theta;, &theta;&#x0307;)<br>Learned RL policy</p>
+        </div>
+        <div class="column">
+          <img src="static/images/quad3d_v2.png" alt="Spatial Quadrotor" style="max-height: 240px;" />
+          <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Spatial Quadrotor (13D)</p>
+          <p class="is-size-7">3D position, orientation,<br>and velocities. LQR control</p>
         </div>
       </div>
     </div>
   </section>
 
-
-  <!-- Video carousel -->
-  <!-- <section class="hero is-small">
-  <div class="hero-body">
-    <div class="container">
-      <h2 class="title is-3">Another Carousel</h2>
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-video1">
-          <video poster="" id="video1" autoplay controls muted loop height="100%">
-            <source src="static/videos/carousel1.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-video2">
-          <video poster="" id="video2" autoplay controls muted loop height="100%">
-            <source src="static/videos/carousel2.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-video3">
-          <video poster="" id="video3" autoplay controls muted loop height="100%">\
-            <source src="static/videos/carousel3.mp4" type="video/mp4">
-          </video>
+  <!-- Probabilistic Classification -->
+  <section class="section hero">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Probabilistic Classification</h2>
+          <div class="content has-text-justified">
+            <p>
+              For each query state, the CFM model generates multiple predicted final states via Monte Carlo sampling. Each sample is evaluated against user-specified success/failure criteria to estimate a success probability. A dual-threshold decision rule then classifies the state: high success probability yields a <code>&lt;Suc&gt;</code> prediction, low probability yields <code>&lt;Fail&gt;</code>, and intermediate values produce an <code>&lt;Unc&gt;</code> label&mdash;indicating the model cannot confidently commit to an outcome. The decision thresholds are jointly optimized to minimize both classification error and the size of the <code>&lt;Unc&gt;</code> region.
+            </p>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>  -->
-  <!-- End video carousel -->
-
-
-
-
-
-
-  <!-- Paper poster -->
-  <!-- <section class="hero is-small is-light">
-  <div class="hero-body">
-    <div class="container">
-      <h2 class="title">Poster</h2>
-      <iframe  src="static/pdfs/sample.pdf" width="100%" height="550"></iframe>
+      <div class="has-text-centered">
+        <img src="static/images/prob_classifier.png" alt="Probabilistic classification via conditional flow matching" style="max-width: 100%;" />
       </div>
-    </div>
-  </section> -->
-  <!--End paper poster -->
-
-
-  <!--BibTex citation -->
-  <section class="section hero" id="BibTeX">
-    <div class="container is-max-desktop content">
-      <h2 class="title">BibTex</h2>
-      <pre><code>
-        @inproceedings{lin2024stable,
-          title={Stable Diffusion Segmentation for Biomedical Images with Single-step Reverse Process},
-          author={Lin, Tianyu and Chen, Zhiguang and Yan, Zhonghao and Yu, Weijiang and Zheng, Fudan},
-          booktitle={International Conference on Medical Image Computing and Computer-Assisted Intervention},
-          year={2024},
-          organization={Springer}
-        }        
-      </code></pre>
     </div>
   </section>
-  <!--End BibTex citation -->
 
+  <!-- Adaptive Sampling -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Adaptive Sampling</h2>
+          <div class="content has-text-justified">
+            <p>
+              Most of the state space is homogeneous&mdash;clearly within the <code>&lt;Suc&gt;</code> or <code>&lt;Fail&gt;</code> region. The critical boundary between them occupies a thin manifold that is underrepresented under uniform sampling. Our DIRECT acquisition algorithm identifies states classified as <code>&lt;Unc&gt;</code> and preferentially collects new trajectory data from this region. Over multiple iterations, the framework progressively refines the <code class="roa">RoA</code> boundary characterization, achieving approximately 1.5&times; data savings compared to uniform sampling.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="has-text-centered">
+        <img src="static/images/adaptive_sampling.png" alt="Adaptive sampling and training pipeline" style="max-width: 100%;" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Conformal Guarantees -->
+  <section class="section hero">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Conformal Guarantees</h2>
+          <div class="content has-text-justified">
+            <p>
+              A split conformal prediction layer certifies the framework's outputs with provable, finite-sample coverage guarantees. Using a held-out calibration set, nonconformity scores are computed to measure how consistent the model's probability estimates are with true labels. For a user-specified confidence level 1&minus;&alpha;, the conformal procedure produces prediction sets guaranteed to contain the true outcome with probability at least 1&minus;&alpha;. Singleton prediction sets ({<code>&lt;Suc&gt;</code>} or {<code>&lt;Fail&gt;</code>}) indicate high-confidence classifications, while non-singleton sets containing <code>&lt;Unc&gt;</code> serve as certificates of abstention. Empirically, coverage exceeds 0.98 across all four benchmark systems at &alpha;&nbsp;=&nbsp;0.1, with nearly all predictions being confident singletons.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Results</h2>
+          <div class="content has-text-justified">
+            <p>
+              Our adaptive method consistently achieves the highest F1 scores (0.933&ndash;0.990) with the smallest uncertain regions (1.0%&ndash;6.0%) across all four benchmark systems, outperforming six baselines spanning value-function, topological, and direct-prediction approaches. Adaptive sampling achieves approximately 1.5&times; data savings over the non-adaptive variant, reaching equivalent accuracy with significantly fewer trajectory rollouts.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="has-text-centered">
+        <img src="static/images/data_efficiency_compact.png" alt="Data efficiency comparison across benchmark systems" style="max-width: 100%;" />
+        <p class="has-text-centered is-size-6" style="margin-top: 0.5rem; max-width: 80%; margin-left: auto; margin-right: auto;">
+          F1 score (top) and uncertain region size (bottom) as a function of trajectory budget across CartPole (4D), Planar Quadrotor (6D), and Spatial Quadrotor (13D). The adaptive variant (red) consistently outperforms the non-adaptive variant (blue) and all baselines.
+        </p>
+      </div>
+    </div>
+  </section>
 
   <footer class="footer">
     <div class="container">
       <div class="columns is-centered">
         <div class="column is-8">
           <div class="content">
-
             <p>
               This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template"
-                target="_blank">Academic Project Page Template</a> which was adopted from the <a
-                href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
-              
+                target="_blank">Academic Project Page Template</a> which was adopted from the <a
+                href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
               <br> This website is licensed under a <a rel="license"
                 href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
                 Commons Attribution-ShareAlike 4.0 International License</a>.
             </p>
-
           </div>
         </div>
       </div>
     </div>
   </footer>
-
-  <!-- Statcounter tracking code -->
-
-  <!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
-
-  <!-- End of Statcounter Code -->
 
 </body>
 
