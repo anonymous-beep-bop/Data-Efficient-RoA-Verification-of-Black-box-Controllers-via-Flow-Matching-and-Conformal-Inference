@@ -72,141 +72,342 @@
     </div>
   </section>
 
-  <!-- Method Overview -->
-  <section class="section hero">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Method Overview</h2>
-          <div class="content has-text-justified">
-            <p>
-              Our framework estimates the Region of Attraction (<code class="roa">RoA</code>) of a black-box controller through three integrated components. Each initial state is classified into one of three labels: <code>&lt;Suc&gt;</code> (the state lies within the <code class="roa">RoA</code> and the controller succeeds), <code>&lt;Fail&gt;</code> (the state lies outside the <code class="roa">RoA</code> and the controller fails), or <code>&lt;Unc&gt;</code> (the model cannot confidently commit to an outcome).
-            </p>
-            <ol>
-              <li><b>Generative Final-State Prediction:</b> A Conditional Flow Matching (CFM) model learns the distribution of terminal states from initial conditions. By capturing multi-modal outcomes, the model naturally expresses uncertainty near the boundary between <code>&lt;Suc&gt;</code> and <code>&lt;Fail&gt;</code> regions.</li>
-              <li><b>Probabilistic Classification with Optimized Thresholds:</b> Monte Carlo samples from the learned distribution are evaluated against success criteria to estimate outcome probabilities. A dual-threshold decision rule classifies each state as <code>&lt;Suc&gt;</code>, <code>&lt;Fail&gt;</code>, or <code>&lt;Unc&gt;</code>, with thresholds optimized to balance accuracy and the size of the <code>&lt;Unc&gt;</code> region.</li>
-              <li><b>Uncertainty-Guided Adaptive Sampling:</b> The <code>&lt;Unc&gt;</code> region guides data collection, concentrating costly trajectory rollouts on boundary states where the classifier cannot commit, progressively refining the <code class="roa">RoA</code> characterization.</li>
-            </ol>
-            <p>
-              Finally, a conformal inference layer certifies all predictions with finite-sample coverage guarantees.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- Sidebar Table of Contents (floating, appears on scroll into sections) -->
+  <nav class="toc-nav" id="toc-nav">
+    <ul class="toc-list">
+      <!-- Why Verification? — commented out for now
+      <li class="toc-group">
+        <a href="#sec-why-verification" class="toc-link toc-top" data-section="sec-why-verification">Why Verification?</a>
+        <ul class="toc-sub">
+          <li><a href="#sub-what-is" class="toc-link" data-section="sub-what-is">What is Verification?</a></li>
+          <li><a href="#sub-why-matter" class="toc-link" data-section="sub-why-matter">Why Does It Matter?</a></li>
+          <li><a href="#sub-challenge" class="toc-link" data-section="sub-challenge">The Challenge</a></li>
+          <li><a href="#sub-approach" class="toc-link" data-section="sub-approach">Our Approach at a Glance</a></li>
+        </ul>
+      </li>
+      -->
+      <li class="toc-group">
+        <a href="#sec-method" class="toc-link toc-top" data-section="sec-method">Method</a>
+        <ul class="toc-sub">
+          <li><a href="#sub-overview" class="toc-link" data-section="sub-overview">Method Overview</a></li>
+          <li><a href="#sub-prob-class" class="toc-link" data-section="sub-prob-class">Probabilistic Classification</a></li>
+          <li><a href="#sub-threshold" class="toc-link" data-section="sub-threshold">Decision Rule &amp; Optimization</a></li>
+          <li><a href="#sub-adaptive" class="toc-link" data-section="sub-adaptive">Adaptive Sampling</a></li>
+          <li><a href="#sub-conformal" class="toc-link" data-section="sub-conformal">Conformal Guarantees</a></li>
+        </ul>
+      </li>
+      <li class="toc-group">
+        <a href="#sec-evaluation" class="toc-link toc-top" data-section="sec-evaluation">Evaluation</a>
+        <ul class="toc-sub">
+          <li><a href="#sub-benchmarks" class="toc-link" data-section="sub-benchmarks">Benchmark Systems</a></li>
+          <li><a href="#sub-results-main" class="toc-link" data-section="sub-results-main">Results</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
 
-  <!-- Benchmark Systems -->
-  <section class="section hero is-light">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Benchmark Systems</h2>
-          <div class="content">
-            <p>We evaluate on four dynamical systems of increasing dimensionality, from a 2D pendulum to a 13D spatial quadrotor.</p>
+  <!-- SECTION 1: Why Verification? — commented out for now
+  <div id="sec-why-verification">
+    <section class="section hero">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3" id="sub-what-is">What is Verification?</h2>
+            <div class="content has-text-justified">
+              <p>
+                [Placeholder] Verification is the process of rigorously checking whether a system&mdash;such as a robot controller&mdash;satisfies certain safety or performance guarantees. In the context of control systems, one key question is: <em>from which initial conditions will the controller successfully stabilize the system?</em> The set of all such initial conditions is called the <strong>Region of Attraction (RoA)</strong>.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-      <div class="columns is-centered has-text-centered">
-        <div class="column">
-          <img src="static/images/pendulum.png" alt="Pendulum" style="max-height: 240px;" />
-          <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Pendulum (2D)</p>
-          <p class="is-size-7">State: $(\theta, \dot{\theta})$<br>LQR control</p>
-        </div>
-        <div class="column">
-          <img src="static/images/cartpole.png" alt="Cartpole" style="max-height: 240px;" />
-          <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Cartpole (4D)</p>
-          <p class="is-size-7">State: $(q, \dot{q}, \theta, \dot{\theta})$<br>LQR control</p>
-        </div>
-        <div class="column">
-          <img src="static/images/quad2d_v2.png" alt="Planar Quadrotor" style="max-height: 240px;" />
-          <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Planar Quadrotor (6D)</p>
-          <p class="is-size-7">State: $(x, \dot{x}, y, \dot{y}, \theta, \dot{\theta})$<br>Learned RL policy</p>
-        </div>
-        <div class="column">
-          <img src="static/images/quad3d_v2.png" alt="Spatial Quadrotor" style="max-height: 240px;" />
-          <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Spatial Quadrotor (13D)</p>
-          <p class="is-size-7">3D position, orientation,<br>and velocities. LQR control</p>
+    </section>
+    <section class="section hero is-light">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3" id="sub-why-matter">Why Does It Matter?</h2>
+            <div class="content has-text-justified">
+              <p>
+                [Placeholder] As robots are increasingly deployed in safety-critical environments&mdash;from autonomous vehicles to surgical robots&mdash;understanding the limits of a controller becomes essential. A controller that works perfectly in simulation may fail catastrophically when started from an unexpected initial state. Verification provides the mathematical confidence needed to deploy these systems safely.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+    <section class="section hero">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3" id="sub-challenge">The Challenge</h2>
+            <div class="content has-text-justified">
+              <p>
+                [Placeholder] Traditional verification methods rely on having a mathematical model of the system. But modern controllers are often black boxes&mdash;neural networks trained via reinforcement learning, for example&mdash;where no such model is available. The only way to test these controllers is by running trajectories, which can be expensive (imagine each test requiring a real-world robot experiment). This makes data efficiency a critical concern: how can we verify a controller with as few experiments as possible?
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section hero is-light">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3" id="sub-approach">Our Approach at a Glance</h2>
+            <div class="content has-text-justified">
+              <p>
+                [Placeholder] Our framework tackles this problem in three steps: (1) we learn a generative model that predicts where the system will end up given a starting point, (2) we use this model to classify starting points as safe, unsafe, or uncertain, and (3) we intelligently choose which experiments to run next by focusing on the uncertain boundary region. The result is a verified map of the controller's capabilities with rigorous statistical guarantees&mdash;using far fewer experiments than brute-force testing.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  -->
 
-  <!-- Probabilistic Classification -->
-  <section class="section hero">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Probabilistic Classification</h2>
-          <div class="content has-text-justified">
-            <p>
-              For each query state, the CFM model generates multiple predicted final states via Monte Carlo sampling. Each sample is evaluated against user-specified success/failure criteria to estimate a success probability. A dual-threshold decision rule then classifies the state: high success probability yields a <code>&lt;Suc&gt;</code> prediction, low probability yields <code>&lt;Fail&gt;</code>, and intermediate values produce an <code>&lt;Unc&gt;</code> label&mdash;indicating the model cannot confidently commit to an outcome. The decision thresholds are jointly optimized to minimize both classification error and the size of the <code>&lt;Unc&gt;</code> region.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="has-text-centered">
-        <img src="static/images/prob_classifier.png" alt="Probabilistic classification via conditional flow matching" style="max-width: 100%;" />
-      </div>
-    </div>
-  </section>
+  <!-- ============================================================ -->
+  <!-- SECTION 2: Method                                             -->
+  <!-- ============================================================ -->
+  <div id="sec-method">
 
-  <!-- Adaptive Sampling -->
-  <section class="section hero is-light">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Adaptive Sampling</h2>
-          <div class="content has-text-justified">
-            <p>
-              Most of the state space is homogeneous&mdash;clearly within the <code>&lt;Suc&gt;</code> or <code>&lt;Fail&gt;</code> region. The critical boundary between them occupies a thin manifold that is underrepresented under uniform sampling. Our DIRECT acquisition algorithm identifies states classified as <code>&lt;Unc&gt;</code> and preferentially collects new trajectory data from this region. Over multiple iterations, the framework progressively refines the <code class="roa">RoA</code> boundary characterization, achieving approximately 1.5&times; data savings compared to uniform sampling.
-            </p>
+    <!-- Method Overview -->
+    <section class="section hero">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3" id="sub-overview">Method Overview</h2>
+            <div class="content has-text-justified">
+              <p>
+                Our framework estimates the Region of Attraction (<code class="roa">RoA</code>) of a black-box controller through three integrated components. Each initial state is classified into one of three labels:
+              </p>
+              <ul class="label-list">
+                <li><code class="label-suc">&lt;Succ&gt;</code> <span class="label-dash">&ndash;</span> <span class="label-desc">the state lies within the <code class="roa">RoA</code> and the controller succeeds</span></li>
+                <li><code class="label-fail">&lt;Fail&gt;</code> <span class="label-dash">&ndash;</span> <span class="label-desc">the state lies outside the <code class="roa">RoA</code> and the controller fails</span></li>
+                <li><code class="label-unc">&lt;Unc&gt;</code> <span class="label-dash">&ndash;</span> <span class="label-desc">the model cannot confidently commit to an outcome</span></li>
+              </ul>
+              <p>
+                These labels are assigned through three integrated components:
+              </p>
+              <ol>
+                <li><b>Generative Final-State Prediction:</b> A Conditional Flow Matching (CFM) model learns the distribution of terminal states from initial conditions. By capturing multi-modal outcomes, the model naturally expresses uncertainty near the boundary between <code class="label-suc">&lt;Succ&gt;</code> and <code class="label-fail">&lt;Fail&gt;</code> regions.</li>
+                <li><b>Probabilistic Classification with Optimized Thresholds:</b> Monte Carlo samples from the learned distribution are evaluated against success criteria to estimate outcome probabilities. A dual-threshold decision rule classifies each state as <code class="label-suc">&lt;Succ&gt;</code>, <code class="label-fail">&lt;Fail&gt;</code>, or <code class="label-unc">&lt;Unc&gt;</code>, with thresholds optimized to balance accuracy and the size of the <code class="label-unc">&lt;Unc&gt;</code> region.</li>
+                <li><b>Uncertainty-Guided Adaptive Sampling:</b> The <code class="label-unc">&lt;Unc&gt;</code> region guides data collection, concentrating costly trajectory rollouts on boundary states where the classifier cannot commit, progressively refining the <code class="roa">RoA</code> characterization.</li>
+              </ol>
+              <p>
+                Finally, a conformal inference layer certifies all predictions with finite-sample coverage guarantees.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-      <div class="has-text-centered">
-        <img src="static/images/adaptive_sampling.png" alt="Adaptive sampling and training pipeline" style="max-width: 100%;" />
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Conformal Guarantees -->
-  <section class="section hero">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Conformal Guarantees</h2>
-          <div class="content has-text-justified">
-            <p>
-              A split conformal prediction layer certifies the framework's outputs with provable, finite-sample coverage guarantees. Using a held-out calibration set, nonconformity scores are computed to measure how consistent the model's probability estimates are with true labels. For a user-specified confidence level 1&minus;&alpha;, the conformal procedure produces prediction sets guaranteed to contain the true outcome with probability at least 1&minus;&alpha;. Singleton prediction sets ({<code>&lt;Suc&gt;</code>} or {<code>&lt;Fail&gt;</code>}) indicate high-confidence classifications, while non-singleton sets containing <code>&lt;Unc&gt;</code> serve as certificates of abstention. Empirically, coverage exceeds 0.98 across all four benchmark systems at &alpha;&nbsp;=&nbsp;0.1, with nearly all predictions being confident singletons.
-            </p>
+    <!-- Probabilistic Classification -->
+    <section class="section hero is-light">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3" id="sub-prob-class">Probabilistic Classification</h2>
+            <div class="content has-text-justified">
+              <p>
+                For each query state, the CFM model draws $K$ predicted final states via Monte Carlo sampling. Each sample is evaluated against both success criteria ($\gamma_s$) and failure criteria ($\gamma_f$) to produce three probability estimates:
+              </p>
+              <ul class="label-list">
+                <li><span class="label-token label-suc">$\hat{p}_s(x)$</span> <span class="label-dash">&ndash;</span> <span class="label-desc">success probability, the fraction of samples satisfying the success criterion</span></li>
+                <li><span class="label-token label-fail">$\hat{p}_f(x)$</span> <span class="label-dash">&ndash;</span> <span class="label-desc">failure probability, the fraction of samples satisfying the failure criterion</span></li>
+                <li><span class="label-token label-unc">$\hat{p}_\text{inv}(x)$</span> <span class="label-dash">&ndash;</span> <span class="label-desc">invalid probability, $1 - \hat{p}_s(x) - \hat{p}_f(x)$, quantifying model error where samples satisfy neither criterion</span></li>
+              </ul>
+              <p>
+                A threshold-based decision rule then classifies each state: high $\hat{p}_s$ yields <code class="label-suc">&lt;Succ&gt;</code>, high $\hat{p}_f$ yields <code class="label-fail">&lt;Fail&gt;</code>, and states with high model error or where neither probability is decisive are labeled <code class="label-unc">&lt;Unc&gt;</code>.
+              </p>
+            </div>
           </div>
         </div>
+        <div class="has-text-centered">
+          <img src="static/images/prob_classifier.png" alt="Probabilistic classification via conditional flow matching" style="max-width: 100%;" />
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Results -->
-  <section class="section hero is-light">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Results</h2>
-          <div class="content has-text-justified">
-            <p>
-              Our adaptive method consistently achieves the highest F1 scores (0.933&ndash;0.990) with the smallest uncertain regions (1.0%&ndash;6.0%) across all four benchmark systems, outperforming six baselines spanning value-function, topological, and direct-prediction approaches. Adaptive sampling achieves approximately 1.5&times; data savings over the non-adaptive variant, reaching equivalent accuracy with significantly fewer trajectory rollouts.
-            </p>
+    <!-- Threshold Optimization -->
+    <section class="section hero">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3" id="sub-threshold">Threshold-based Decision Rule &amp; Optimization</h2>
+            <div class="content has-text-justified">
+              <p>
+                Given the three probability estimates $\hat{p}_s(x)$, $\hat{p}_f(x)$, and $\hat{p}_\text{inv}(x)$, a threshold-based decision rule maps each state to one of three labels. The rule is parameterized by a center $\lambda$ and a margin $\delta$, which define decision boundaries $\theta_s = \lambda + \delta$ and $\theta_f = 1 - (\lambda - \delta)$. Classification proceeds in three stages:
+              </p>
+              <ol>
+                <li><b>Model error filter:</b> If $\hat{p}_\text{inv}(x) \geq \lambda - \delta$, the state is classified as <code class="label-unc">&lt;Unc&gt;</code>&mdash;too many generated samples are invalid, indicating the model has not learned this region well.</li>
+                <li><b>Confident predictions:</b> Among remaining states, if $\hat{p}_s(x) \geq \theta_s$ the state is classified as <code class="label-suc">&lt;Succ&gt;</code>; if $\hat{p}_f(x) \geq \theta_f$ it is classified as <code class="label-fail">&lt;Fail&gt;</code>.</li>
+                <li><b>Outcome uncertainty:</b> If neither threshold is met, the model generates valid but mixed outcomes and cannot confidently resolve the state, so it is classified as <code class="label-unc">&lt;Unc&gt;</code>.</li>
+              </ol>
+              <p>
+                The parameters $\lambda^*$ and $\delta^*$ are jointly optimized on a validation set to minimize a weighted combination of classification error (fraction of confident predictions that disagree with ground truth) and the size of the <code class="label-unc">&lt;Unc&gt;</code> region. This balances two competing goals: reducing misclassifications while keeping the uncertain region as small as possible.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="has-text-centered">
+          <img src="static/images/threshold_optimization.png" alt="Threshold optimization along the probability line" style="max-width: 70%;" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Adaptive Sampling -->
+    <section class="section hero is-light">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3" id="sub-adaptive">Adaptive Sampling</h2>
+            <div class="content has-text-justified">
+              <p>
+                Most of the state space is homogeneous&mdash;clearly within the <code class="label-suc">&lt;Succ&gt;</code> or <code class="label-fail">&lt;Fail&gt;</code> region. The critical boundary between them occupies a thin manifold that is underrepresented under uniform sampling. Our DIRECT acquisition algorithm identifies states classified as <code class="label-unc">&lt;Unc&gt;</code> and preferentially collects new trajectory data from this region. Over multiple iterations, the framework progressively refines the <code class="roa">RoA</code> boundary characterization, achieving approximately 1.5&times; data savings compared to uniform sampling.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="has-text-centered">
+          <img src="static/images/adaptive_sampling.png" alt="Adaptive sampling and training pipeline" style="max-width: 100%;" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Conformal Guarantees -->
+    <section class="section hero">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3" id="sub-conformal">Conformal Guarantees</h2>
+            <div class="content has-text-justified">
+              <p>
+                A split conformal prediction layer certifies the framework's outputs with provable, finite-sample coverage guarantees. A held-out calibration set $\mathcal{D}_\text{cal}$ with ground-truth labels is used to compute nonconformity scores that measure how inconsistent the model's probability estimates are with each candidate label. States flagged as model error ($\hat{p}_\text{inv} \geq \lambda^* - \delta^*$) are filtered from the calibration set to avoid inflating the conformal quantile with modeling artifacts. For a user-specified confidence level $1-\alpha$, the conformal procedure produces prediction sets guaranteed to contain the true outcome with probability at least $1-\alpha$. Singleton prediction sets ({<code class="label-suc">&lt;Succ&gt;</code>} or {<code class="label-fail">&lt;Fail&gt;</code>}) indicate high-confidence classifications, while non-singleton sets containing <code class="label-unc">&lt;Unc&gt;</code> serve as certificates of abstention. Empirically, coverage exceeds 0.98 across all four benchmark systems at $\alpha = 0.1$, with nearly all predictions being confident singletons.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-      <div class="has-text-centered">
-        <img src="static/images/data_efficiency_compact.png" alt="Data efficiency comparison across benchmark systems" style="max-width: 100%;" />
-        <p class="has-text-centered is-size-6" style="margin-top: 0.5rem; max-width: 80%; margin-left: auto; margin-right: auto;">
-          F1 score (top) and uncertain region size (bottom) as a function of trajectory budget across CartPole (4D), Planar Quadrotor (6D), and Spatial Quadrotor (13D). The adaptive variant (red) consistently outperforms the non-adaptive variant (blue) and all baselines.
-        </p>
+    </section>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 3: Evaluation                                         -->
+  <!-- ============================================================ -->
+  <div id="sec-evaluation">
+
+    <!-- Benchmark Systems -->
+    <section class="section hero is-light">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3" id="sub-benchmarks">Benchmark Systems</h2>
+            <div class="content">
+              <p>We evaluate on four dynamical systems of increasing dimensionality, from a 2D pendulum to a 13D spatial quadrotor.</p>
+            </div>
+          </div>
+        </div>
+        <div class="columns is-centered has-text-centered" style="margin-bottom: 0;">
+          <div class="column is-half">
+            <video autoplay muted playsinline class="benchmark-video" style="max-height: 280px; border: 2px solid #999; border-radius: 8px;">
+              <source src="static/images/pendulum.mp4" type="video/mp4">
+            </video>
+            <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Pendulum (2D)</p>
+            <p class="is-size-6">State: $(\theta, \dot{\theta})$<br>LQR control</p>
+          </div>
+          <div class="column is-half">
+            <video autoplay muted playsinline class="benchmark-video" style="max-height: 280px; border: 2px solid #999; border-radius: 8px;">
+              <source src="static/images/cartpole.mp4" type="video/mp4">
+            </video>
+            <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Cartpole (4D)</p>
+            <p class="is-size-6">State: $(q, \theta, \dot{q}, \dot{\theta})$<br>LQR control</p>
+          </div>
+        </div>
+        <div class="columns is-centered has-text-centered" style="margin-top: 0;">
+          <div class="column is-half">
+            <video autoplay muted playsinline class="benchmark-video" style="max-height: 280px; border: 2px solid #999; border-radius: 8px;">
+              <source src="static/images/2dquad.mp4" type="video/mp4">
+            </video>
+            <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Planar Quadrotor (6D)</p>
+            <p class="is-size-6">State: $(q_x, q_z, \phi, \dot{q}_x, \dot{q}_z, \dot{\phi})$<br>Learned RL policy</p>
+          </div>
+          <div class="column is-half">
+            <video autoplay muted playsinline class="benchmark-video" style="max-height: 280px; border: 2px solid #999; border-radius: 8px;">
+              <source src="static/images/3dquad.mp4" type="video/mp4">
+            </video>
+            <p class="has-text-weight-semibold" style="margin-top: 0.5rem;">Spatial Quadrotor (13D)</p>
+            <p class="is-size-6">State: $(q, q_\text{quat}, \dot{q}, \omega)$<br>LQR control</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <!-- Results -->
+    <section class="section hero">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3" id="sub-results-main">Results</h2>
+            <div class="content has-text-justified">
+              <p>
+                Our adaptive method achieves the highest F1 scores on 3 out of 4 systems while maintaining small uncertain regions, outperforming six baselines spanning value-function, topological, and direct-prediction approaches. On the most challenging 13D Spatial Quadrotor, the uncertain region is larger reflecting the inherent difficulty of high-dimensional verification. Adaptive sampling achieves approximately 1.5&times; data savings over the non-adaptive variant, reaching equivalent accuracy with significantly fewer trajectory rollouts.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Results Explorer -->
+        <div style="margin-top: 1.5rem;">
+          <div class="de-panel" style="margin-bottom: 1rem;">
+            <h4 class="title is-5 has-text-centered" style="margin-bottom: 0.5rem;">Pendulum (2D)</h4>
+            <div class="de-slider-container">
+              <span class="de-slider-bound">50</span>
+              <input type="range" class="de-slider" id="slider-pendulum" min="50" max="500" step="50" value="500">
+              <span class="de-slider-bound de-slider-bound-max">500</span>
+            </div>
+            <div class="de-traj-label has-text-centered" id="label-pendulum"></div>
+            <div id="table-pendulum"></div>
+          </div>
+          <div class="de-panel" style="margin-bottom: 1rem;">
+            <h4 class="title is-5 has-text-centered" style="margin-bottom: 0.5rem;">CartPole (4D)</h4>
+            <div class="de-slider-container">
+              <span class="de-slider-bound">300</span>
+              <input type="range" class="de-slider" id="slider-cartpole" min="300" max="1000" step="50" value="1000">
+              <span class="de-slider-bound de-slider-bound-max">1,000</span>
+            </div>
+            <div class="de-traj-label has-text-centered" id="label-cartpole"></div>
+            <div id="table-cartpole"></div>
+          </div>
+          <div class="de-panel" style="margin-bottom: 1rem;">
+            <h4 class="title is-5 has-text-centered" style="margin-bottom: 0.5rem;">Planar Quad (6D)</h4>
+            <div class="de-slider-container">
+              <span class="de-slider-bound">3,000</span>
+              <input type="range" class="de-slider" id="slider-quad2d" min="3000" max="12000" step="1000" value="12000">
+              <span class="de-slider-bound de-slider-bound-max">12,000</span>
+            </div>
+            <div class="de-traj-label has-text-centered" id="label-quad2d"></div>
+            <div id="table-quad2d"></div>
+          </div>
+          <div class="de-panel" style="margin-bottom: 1rem;">
+            <h4 class="title is-5 has-text-centered" style="margin-bottom: 0.5rem;">Spatial Quad (13D)</h4>
+            <div class="de-slider-container">
+              <span class="de-slider-bound">10,000</span>
+              <input type="range" class="de-slider" id="slider-quad3d" min="10000" max="25000" step="1000" value="25000">
+              <span class="de-slider-bound de-slider-bound-max">25,000</span>
+            </div>
+            <div class="de-traj-label has-text-centered" id="label-quad3d"></div>
+            <div id="table-quad3d"></div>
+          </div>
+        </div>
+        <p class="de-footnote">Baselines shown at full evaluation budget. Drag sliders to explore how our methods (highlighted) perform with fewer trajectories.</p>
+      </div>
+    </section>
+
+  </div>
 
   <footer class="footer">
     <div class="container">
@@ -226,6 +427,112 @@
       </div>
     </div>
   </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="static/js/data-efficiency.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var toc = document.getElementById('toc-nav');
+      var links = document.querySelectorAll('.toc-link');
+      var topSectionIds = [/* 'sec-why-verification', */ 'sec-method', 'sec-evaluation'];
+      var topSections = topSectionIds.map(function (id) { return document.getElementById(id); }).filter(Boolean);
+      var allIds = [];
+      links.forEach(function (l) { allIds.push(l.dataset.section); });
+      var allTargets = allIds.map(function (id) { return document.getElementById(id); });
+      var lastTopSection = topSections[topSections.length - 1];
+      var scrollOffset = 20;
+
+      function getTop(el) {
+        return el.getBoundingClientRect().top + window.scrollY;
+      }
+
+      function updateToc() {
+        var scrollPos = window.scrollY + scrollOffset;
+        var sectionsTop = getTop(topSections[0]);
+        var sectionsBottom = getTop(lastTopSection) + lastTopSection.offsetHeight;
+
+        // Show/hide sidebar
+        var inSections = (window.scrollY + 100 >= sectionsTop) && (scrollPos <= sectionsBottom);
+        toc.classList.toggle('is-visible', inSections);
+
+        // Find active link — the last target whose top is above the viewport threshold
+        var current = allIds[0];
+        for (var i = 0; i < allTargets.length; i++) {
+          if (allTargets[i] && getTop(allTargets[i]) <= scrollPos + 60) {
+            current = allIds[i];
+          }
+        }
+        // Update active link and active group
+        var activeGroup = null;
+        links.forEach(function (link) {
+          var isActive = link.dataset.section === current;
+          link.classList.toggle('is-active', isActive);
+          if (isActive) {
+            activeGroup = link.closest('.toc-group');
+          }
+        });
+        var groups = toc.querySelectorAll('.toc-group');
+        groups.forEach(function (g) {
+          g.classList.toggle('is-active-group', g === activeGroup);
+        });
+      }
+
+      var ticking = false;
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(function () {
+            updateToc();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+      updateToc();
+
+      // Smooth scroll on click
+      links.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          var target = document.getElementById(link.dataset.section);
+          if (target) {
+            window.scrollTo({
+              top: getTop(target) - scrollOffset,
+              behavior: 'smooth'
+            });
+            history.replaceState(null, '', '#' + link.dataset.section);
+          }
+        });
+      });
+
+      // Handle URL hash on load
+      var hash = window.location.hash.substring(1);
+      if (hash && document.getElementById(hash)) {
+        setTimeout(function () {
+          var target = document.getElementById(hash);
+          window.scrollTo({ top: getTop(target) - scrollOffset, behavior: 'smooth' });
+        }, 100);
+      }
+    });
+
+    // Benchmark videos: sync all loops so they restart together
+    (function () {
+      var videos = Array.prototype.slice.call(document.querySelectorAll('.benchmark-video'));
+      var ended = 0;
+      function restartAll() {
+        videos.forEach(function (v) { v.currentTime = 0; v.play(); });
+        ended = 0;
+      }
+
+      videos.forEach(function (v) {
+        v.addEventListener('ended', function () {
+          ended++;
+          if (ended === videos.length) {
+            restartAll();
+          }
+        });
+      });
+    })();
+  </script>
 
 </body>
 
