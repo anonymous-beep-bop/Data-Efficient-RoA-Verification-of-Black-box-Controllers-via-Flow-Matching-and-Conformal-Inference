@@ -28,7 +28,7 @@
 <body>
 
   <!-- Title / Hero -->
-  <section class="hero">
+  <section class="hero" id="sec-home">
     <div class="hero-body">
       <div class="container is-max-desktop">
         <div class="columns is-centered">
@@ -38,11 +38,41 @@
             <div class="is-size-5 publication-authors">
               <span class="author-block">Anonymous submission</span>
             </div>
+            <div class="column has-text-centered" style="margin-top: 0.75rem;">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="static/pdfs/paper.pdf" target="_blank" class="button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- Project Video — commented out for now
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-4">Results Video</h2>
+            <div class="publication-video">
+              <video controls style="width: 100%; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+                <source src="static/videos/IROS-2026_RoA.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  -->
 
   <!-- Teaser Figure -->
   <section class="hero teaser">
@@ -50,14 +80,14 @@
       <div class="hero-body has-text-centered">
         <img src="static/images/flagship_horiz.png" alt="RoA identification comparison on 4D Cartpole system" style="max-width: 100%;" />
         <h2 class="subtitle has-text-centered" style="margin-top: 1rem;">
-          <code class="roa">RoA</code> identification on two 2D slices of a 4D Cartpole system. Left to right: Ground Truth <code class="roa">RoA</code>, Adaptive (Ours), Non-adaptive (Ours), and DeepReach baseline. The adaptive method closely recovers the ground-truth <code class="roa">RoA</code> with well-calibrated uncertainty at the boundary.
+          <code class="roa">RoA</code> identification on two 2D slices of a 4D Cartpole system. Left to right: Ground Truth <code class="roa">RoA</code>, DeepReach baseline, Non-adaptive (Ours), and Adaptive (Ours).
         </h2>
       </div>
     </div>
   </section>
 
   <!-- Abstract -->
-  <section class="section hero is-light">
+  <section class="section hero is-light" id="sec-abstract">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column is-four-fifths">
@@ -74,7 +104,14 @@
 
   <!-- Sidebar Table of Contents (floating, appears on scroll into sections) -->
   <nav class="toc-nav" id="toc-nav">
+    <div class="toc-heading">On this page</div>
     <ul class="toc-list">
+      <li class="toc-group">
+        <a href="#sec-home" class="toc-link toc-top" data-section="sec-home">Home</a>
+      </li>
+      <li class="toc-group">
+        <a href="#sec-abstract" class="toc-link toc-top" data-section="sec-abstract">Abstract</a>
+      </li>
       <!-- Why Verification? — commented out for now
       <li class="toc-group">
         <a href="#sec-why-verification" class="toc-link toc-top" data-section="sec-why-verification">Why Verification?</a>
@@ -352,58 +389,61 @@
         <div class="columns is-centered has-text-centered">
           <div class="column is-four-fifths">
             <h2 class="title is-3" id="sub-results-main">Results</h2>
-            <div class="content has-text-justified">
-              <p>
-                Our adaptive method achieves the highest F1 scores on 3 out of 4 systems while maintaining small uncertain regions, outperforming six baselines spanning value-function, topological, and direct-prediction approaches. On the most challenging 13D Spatial Quadrotor, the uncertain region is larger reflecting the inherent difficulty of high-dimensional verification. Adaptive sampling achieves approximately 1.5&times; data savings over the non-adaptive variant, reaching equivalent accuracy with significantly fewer trajectory rollouts.
-              </p>
-            </div>
+            <p class="is-size-5" style="margin-top: 0.5rem;">Baselines shown at full evaluation budget. Drag sliders to explore how our methods (highlighted) perform with fewer trajectories.</p>
           </div>
         </div>
 
         <!-- Interactive Results Explorer -->
         <div style="margin-top: 1.5rem;">
           <div class="de-panel" style="margin-bottom: 1rem;">
-            <h4 class="title is-5 has-text-centered" style="margin-bottom: 0.5rem;">Pendulum (2D)</h4>
-            <div class="de-slider-container">
-              <span class="de-slider-bound">50</span>
-              <input type="range" class="de-slider" id="slider-pendulum" min="50" max="500" step="50" value="500">
-              <span class="de-slider-bound de-slider-bound-max">500</span>
+            <div class="de-panel-header">
+              <h4 class="title is-5 has-text-centered" style="margin-bottom: 0.5rem;">Pendulum (2D)</h4>
+              <div class="de-slider-container">
+                <span class="de-slider-bound">100</span>
+                <input type="range" class="de-slider" id="slider-pendulum" min="100" max="500" step="50" value="500">
+                <span class="de-slider-bound de-slider-bound-max">500</span>
+              </div>
+              <div class="de-traj-label has-text-centered" id="label-pendulum"></div>
             </div>
-            <div class="de-traj-label has-text-centered" id="label-pendulum"></div>
             <div id="table-pendulum"></div>
           </div>
           <div class="de-panel" style="margin-bottom: 1rem;">
-            <h4 class="title is-5 has-text-centered" style="margin-bottom: 0.5rem;">CartPole (4D)</h4>
-            <div class="de-slider-container">
-              <span class="de-slider-bound">300</span>
-              <input type="range" class="de-slider" id="slider-cartpole" min="300" max="1000" step="50" value="1000">
-              <span class="de-slider-bound de-slider-bound-max">1,000</span>
+            <div class="de-panel-header">
+              <h4 class="title is-5 has-text-centered" style="margin-bottom: 0.5rem;">CartPole (4D)</h4>
+              <div class="de-slider-container">
+                <span class="de-slider-bound">300</span>
+                <input type="range" class="de-slider" id="slider-cartpole" min="300" max="1000" step="50" value="1000">
+                <span class="de-slider-bound de-slider-bound-max">1,000</span>
+              </div>
+              <div class="de-traj-label has-text-centered" id="label-cartpole"></div>
             </div>
-            <div class="de-traj-label has-text-centered" id="label-cartpole"></div>
             <div id="table-cartpole"></div>
           </div>
           <div class="de-panel" style="margin-bottom: 1rem;">
-            <h4 class="title is-5 has-text-centered" style="margin-bottom: 0.5rem;">Planar Quad (6D)</h4>
-            <div class="de-slider-container">
-              <span class="de-slider-bound">3,000</span>
-              <input type="range" class="de-slider" id="slider-quad2d" min="3000" max="12000" step="1000" value="12000">
-              <span class="de-slider-bound de-slider-bound-max">12,000</span>
+            <div class="de-panel-header">
+              <h4 class="title is-5 has-text-centered" style="margin-bottom: 0.5rem;">Planar Quadrotor (6D)</h4>
+              <div class="de-slider-container">
+                <span class="de-slider-bound">3,000</span>
+                <input type="range" class="de-slider" id="slider-quad2d" min="3000" max="12000" step="1000" value="12000">
+                <span class="de-slider-bound de-slider-bound-max">12,000</span>
+              </div>
+              <div class="de-traj-label has-text-centered" id="label-quad2d"></div>
             </div>
-            <div class="de-traj-label has-text-centered" id="label-quad2d"></div>
             <div id="table-quad2d"></div>
           </div>
           <div class="de-panel" style="margin-bottom: 1rem;">
-            <h4 class="title is-5 has-text-centered" style="margin-bottom: 0.5rem;">Spatial Quad (13D)</h4>
-            <div class="de-slider-container">
-              <span class="de-slider-bound">10,000</span>
-              <input type="range" class="de-slider" id="slider-quad3d" min="10000" max="25000" step="1000" value="25000">
-              <span class="de-slider-bound de-slider-bound-max">25,000</span>
+            <div class="de-panel-header">
+              <h4 class="title is-5 has-text-centered" style="margin-bottom: 0.5rem;">Spatial Quadrotor (13D)</h4>
+              <div class="de-slider-container">
+                <span class="de-slider-bound">10,000</span>
+                <input type="range" class="de-slider" id="slider-quad3d" min="10000" max="25000" step="1000" value="25000">
+                <span class="de-slider-bound de-slider-bound-max">25,000</span>
+              </div>
+              <div class="de-traj-label has-text-centered" id="label-quad3d"></div>
             </div>
-            <div class="de-traj-label has-text-centered" id="label-quad3d"></div>
             <div id="table-quad3d"></div>
           </div>
         </div>
-        <p class="de-footnote">Baselines shown at full evaluation budget. Drag sliders to explore how our methods (highlighted) perform with fewer trajectories.</p>
       </div>
     </section>
 
@@ -434,7 +474,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       var toc = document.getElementById('toc-nav');
       var links = document.querySelectorAll('.toc-link');
-      var topSectionIds = [/* 'sec-why-verification', */ 'sec-method', 'sec-evaluation'];
+      var topSectionIds = ['sec-home', 'sec-abstract', /* 'sec-why-verification', */ 'sec-method', 'sec-evaluation'];
       var topSections = topSectionIds.map(function (id) { return document.getElementById(id); }).filter(Boolean);
       var allIds = [];
       links.forEach(function (l) { allIds.push(l.dataset.section); });
@@ -448,12 +488,6 @@
 
       function updateToc() {
         var scrollPos = window.scrollY + scrollOffset;
-        var sectionsTop = getTop(topSections[0]);
-        var sectionsBottom = getTop(lastTopSection) + lastTopSection.offsetHeight;
-
-        // Show/hide sidebar
-        var inSections = (window.scrollY + 100 >= sectionsTop) && (scrollPos <= sectionsBottom);
-        toc.classList.toggle('is-visible', inSections);
 
         // Find active link — the last target whose top is above the viewport threshold
         var current = allIds[0];

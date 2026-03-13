@@ -10,7 +10,6 @@
         {name:'Classification',traj:500,f1:.974,sep:0.2,prec:.9514,rec:.9985,spec:N}
       ],
       nonadaptive: [
-        {traj:50,f1:.9990,sep:73.76,prec:.9981,rec:1.0000,spec:.9995},
         {traj:100,f1:.9341,sep:51.62,prec:.9883,rec:.8855,spec:.9966},
         {traj:150,f1:.9833,sep:18.72,prec:.9854,rec:.9812,spec:.9913},
         {traj:200,f1:.9830,sep:11.57,prec:.9915,rec:.9746,spec:.9950},
@@ -22,7 +21,6 @@
         {traj:500,f1:.9932,sep:8.01,prec:.9913,rec:.9952,spec:.9947}
       ],
       adaptive: [
-        {traj:50,f1:.9990,sep:73.76,prec:.9981,rec:1.0000,spec:.9995},
         {traj:100,f1:.9492,sep:30.68,prec:.9932,rec:.9089,spec:.9975},
         {traj:150,f1:.9717,sep:20.55,prec:.9930,rec:.9513,spec:.9957},
         {traj:200,f1:.9742,sep:11.74,prec:.9969,rec:.9526,spec:.9985},
@@ -32,6 +30,17 @@
         {traj:400,f1:.9726,sep:2.04,prec:1.0000,rec:.9466,spec:1.0000},
         {traj:450,f1:.9857,sep:3.07,prec:.9992,rec:.9726,spec:.9995},
         {traj:500,f1:.9741,sep:5.95,prec:1.0000,rec:.9495,spec:1.0000}
+      ],
+      adaptive_05: [
+        {traj:100,f1:.9912,sep:44.80,prec:.9947,rec:.9878,spec:.9970},
+        {traj:150,f1:.9771,sep:25.83,prec:.9999,rec:.9553,spec:1.0000},
+        {traj:200,f1:.9863,sep:11.23,prec:.9905,rec:.9821,spec:.9938},
+        {traj:250,f1:.9800,sep:8.27,prec:.9964,rec:.9641,spec:.9978},
+        {traj:300,f1:.9906,sep:12.20,prec:.9905,rec:.9907,spec:.9933},
+        {traj:350,f1:.9809,sep:6.16,prec:.9861,rec:.9758,spec:.9907},
+        {traj:400,f1:.9872,sep:3.41,prec:.9886,rec:.9858,spec:.9926},
+        {traj:450,f1:.9925,sep:2.45,prec:.9951,rec:.9899,spec:.9969},
+        {traj:500,f1:.9902,sep:1.57,prec:.9949,rec:.9856,spec:.9968}
       ]
     },
     cartpole: {
@@ -205,8 +214,10 @@
 
     var na = findNearest(sys.nonadaptive, traj);
     var ad = findNearest(sys.adaptive, traj);
+    var ad05 = sys.adaptive_05 ? findNearest(sys.adaptive_05, traj) : null;
 
     var allF1 = sys.baselines.map(function(b) { return b.f1; }).concat([na.f1, ad.f1]);
+    if (ad05) allF1.push(ad05.f1);
     var bestF1 = Math.max.apply(null, allF1);
 
     var html = '<table class="de-table"><thead><tr>';
@@ -233,13 +244,27 @@
     html += '<td class="de-traj-col">' + na.traj.toLocaleString() + '</td>';
     html += metricCells(na, naIsBest) + '</tr>';
 
+    if (ad05) {
+      var ad05IsBest = Math.abs(ad05.f1 - bestF1) < 0.0005;
+      html += '<tr class="de-ours-row"><td><b>Adaptive (<i>r</i><sub>unc</sub>=0.5) (Ours)</b></td>';
+      html += '<td class="de-traj-col">' + ad05.traj.toLocaleString() + '</td>';
+      html += metricCells(ad05, ad05IsBest) + '</tr>';
+    }
+
     var adIsBest = Math.abs(ad.f1 - bestF1) < 0.0005;
-    html += '<tr class="de-ours-row de-ours-row-last"><td><b>Adaptive (Ours)</b></td>';
+    var adName = ad05 ? 'Adaptive (<i>r</i><sub>unc</sub>=1) (Ours)' : 'Adaptive (<i>r</i><sub>unc</sub>=1) (Ours)';
+    html += '<tr class="de-ours-row de-ours-row-last"><td><b>' + adName + '</b></td>';
     html += '<td class="de-traj-col">' + ad.traj.toLocaleString() + '</td>';
     html += metricCells(ad, adIsBest) + '</tr>';
 
     html += '</tbody></table>';
     tableDiv.innerHTML = html;
+
+    if (typeof renderMathInElement === 'function') {
+      renderMathInElement(tableDiv, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});
+    }
+
+    updatePlots(key, traj);
 
     if (CHARTS[key]) {
       CHARTS[key].f1.options.plugins.sliderLine.value = traj;
@@ -290,7 +315,7 @@
     );
 
     datasets.push({
-      label: 'Adaptive (Ours)',
+      label: sys.adaptive_05 ? 'Adaptive - r_unc=1 (Ours)' : 'Adaptive - r_unc=1 (Ours)',
       data: sys.adaptive.map(function(d) { return {x: d.traj, y: metric === 'f1' ? d.f1 : d.sep}; }),
       borderColor: '#2171b5',
       backgroundColor: '#2171b5',
@@ -299,6 +324,19 @@
       pointStyle: 'circle',
       tension: 0
     });
+
+    if (sys.adaptive_05) {
+      datasets.push({
+        label: 'Adaptive - r_unc=0.5 (Ours)',
+        data: sys.adaptive_05.map(function(d) { return {x: d.traj, y: metric === 'f1' ? d.f1 : d.sep}; }),
+        borderColor: '#2ca02c',
+        backgroundColor: '#2ca02c',
+        borderWidth: 2.5,
+        pointRadius: 3.5,
+        pointStyle: 'triangle',
+        tension: 0
+      });
+    }
 
     datasets.push({
       label: 'Non-adaptive (Ours)',
@@ -333,16 +371,21 @@
     return datasets;
   }
 
-  function buildLegend() {
+  function buildLegend(sys) {
     var items = [
-      {label: 'Adaptive (Ours)', color: '#2171b5', dash: '', marker: 'circle'},
+      {label: sys && sys.adaptive_05 ? 'Adaptive (<i>r</i><sub>unc</sub>=1) (Ours)' : 'Adaptive (<i>r</i><sub>unc</sub>=1) (Ours)', color: '#2171b5', dash: '', marker: 'circle'},
+    ];
+    if (sys && sys.adaptive_05) {
+      items.push({label: 'Adaptive (<i>r</i><sub>unc</sub>=0.5) (Ours)', color: '#2ca02c', dash: '', marker: 'triangle'});
+    }
+    items.push(
       {label: 'Non-adaptive (Ours)', color: '#cb181d', dash: '', marker: 'rect'},
       {label: 'DeepReach', color: '#7b2d8e', dash: '6,4'},
       {label: 'Classification', color: '#1a8a4a', dash: '12,6'},
       {label: 'MORALS', color: '#d45800', dash: '2,3'},
       {label: 'Lyapunov NN', color: '#d6277f', dash: '14,5,3,5'},
       {label: 'Deterministic Final State Pred.', color: '#555555', dash: '8,3,2,3'}
-    ];
+    );
     var html = '';
     for (var i = 0; i < items.length; i++) {
       var it = items[i];
@@ -351,6 +394,7 @@
       if (it.dash) svg += ' stroke-dasharray="' + it.dash + '"';
       svg += '/>';
       if (it.marker === 'circle') svg += '<circle cx="12" cy="6" r="3" fill="' + it.color + '"/>';
+      if (it.marker === 'triangle') svg += '<polygon points="12,2 8,10 16,10" fill="' + it.color + '"/>';
       if (it.marker === 'rect') svg += '<rect x="9" y="3" width="6" height="6" fill="' + it.color + '"/>';
       svg += '</svg>';
       html += '<div style="display:flex;align-items:center;gap:4px;white-space:nowrap;">' + svg + '<span>' + it.label + '</span></div>';
@@ -364,7 +408,7 @@
     var minT = sys.nonadaptive[0].traj;
 
     var container = document.createElement('div');
-    container.style.cssText = 'margin-top:2rem;';
+    container.style.cssText = 'margin-top:2rem; max-width:800px; margin-left:auto; margin-right:auto;';
 
     var plotRow = document.createElement('div');
     plotRow.style.cssText = 'display:flex; gap:0.5rem;';
@@ -384,11 +428,15 @@
 
     var wrapLeg = document.createElement('div');
     wrapLeg.style.cssText = 'display:flex; flex-wrap:wrap; justify-content:center; gap:4px 1.5rem; font-size:1.05rem; margin-top:0.4rem;';
-    wrapLeg.innerHTML = buildLegend();
+    wrapLeg.innerHTML = buildLegend(sys);
 
     container.appendChild(plotRow);
     container.appendChild(wrapLeg);
     panel.appendChild(container);
+
+    if (typeof renderMathInElement === 'function') {
+      renderMathInElement(wrapLeg, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});
+    }
 
     function chartOpts(yLabel) {
       return {
@@ -440,6 +488,358 @@
     CHARTS[key] = {f1: f1Chart, unc: uncChart};
   }
 
+  /* ── Plot image grid configuration ── */
+  var PLOT_CONFIG = {
+    pendulum: {
+      dir: 'static/website_video_frames/pendulum',
+      trajs: [100, 150, 200, 250, 300, 350, 400, 450, 500],
+      splitGT: true,
+      title: 'Classification',
+      methods: [
+        {key: 'nonadaptive', label: 'Non-adaptive'},
+        {key: 'adaptive_05', label: 'Adaptive ($r_{\\text{unc}}=0.5$)'},
+        {key: 'adaptive_1', label: 'Adaptive ($r_{\\text{unc}}=1$)'}
+      ],
+      pairs: [{key: 'theta_thetadot',
+        yTitle: '$\\dot{\\theta}$ (rad/s)', xTitle: '$\\theta$ (rad)',
+        ticks: {x: ['$-\\pi$','$0$','$\\pi$'], y: ['$-2\\pi$','$0$','$2\\pi$']}}]
+    },
+    cartpole: {
+      dir: 'static/website_video_frames/cartpole',
+      trajs: [300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000],
+      methods: [
+        {key: 'nonadaptive', label: 'Non-adaptive'},
+        {key: 'adaptive', label: 'Adaptive ($r_{\\text{unc}}=1$)'}
+      ],
+      pairs: [
+        {key: 'theta_thetadot',
+          yTitle: '$\\dot{\\theta}$ (rad/s)', xTitle: '$\\theta$ (rad)',
+          sliceInfo: '$\\theta$–$\\dot{\\theta}$ plane with $x = 0$, $\\dot{x} = 0$',
+          ticks: {x: ['$-\\pi$','$0$','$\\pi$'], y: ['$-5$','$0$','$5$']}},
+        {key: 'x_xdot',
+          yTitle: '$\\dot{x}$ (m/s)', xTitle: '$x$ (m)',
+          sliceInfo: '$x$–$\\dot{x}$ plane with $\\theta = 0$, $\\dot{\\theta} = 0$',
+          ticks: {x: ['$-6$','$0$','$6$'], y: ['$-5$','$0$','$5$']}}
+      ]
+    },
+    quad2d: {
+      dir: 'static/website_video_frames/quadrotor2d',
+      trajs: [3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000],
+      methods: [
+        {key: 'nonadaptive', label: 'Non-adaptive'},
+        {key: 'adaptive', label: 'Adaptive ($r_{\\text{unc}}=1$)'}
+      ],
+      pairs: [
+        {key: 'theta_thetadot',
+          yTitle: '$\\dot{\\theta}$ (rad/s)', xTitle: '$\\theta$ (rad)',
+          sliceInfo: '$\\theta$–$\\dot{\\theta}$ plane with $z = 1$ m, $x = \\dot{x} = \\dot{z} = 0$',
+          ticks: {x: ['$-\\pi$','$0$','$\\pi$'], y: ['$-8$','$0$','$8$']}},
+        {key: 'x_xdot',
+          yTitle: '$\\dot{x}$ (m/s)', xTitle: '$x$ (m)',
+          sliceInfo: '$x$–$\\dot{x}$ plane with $z = 1$ m, $\\theta = \\dot{z} = \\dot{\\theta} = 0$',
+          ticks: {x: ['$-1$','$0$','$1$'], y: ['$-1$','$0$','$1$']}},
+        {key: 'z_zdot',
+          yTitle: '$\\dot{z}$ (m/s)', xTitle: '$z$ (m)',
+          sliceInfo: '$z$–$\\dot{z}$ plane with $x = \\dot{x} = \\theta = \\dot{\\theta} = 0$',
+          ticks: {x: ['$0.1$','$0.8$','$1.5$'], y: ['$-1$','$0$','$1$']}}
+      ]
+    },
+    quad3d: {
+      dir: 'static/website_video_frames/quadrotor3d',
+      trajs: [10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 21000, 22000, 23000, 24000, 25000],
+      methods: [
+        {key: 'nonadaptive', label: 'Non-adaptive'},
+        {key: 'adaptive', label: 'Adaptive ($r_{\\text{unc}}=1$)'}
+      ],
+      pairGroups: [
+        {
+          label: 'Angular',
+          pairs: [
+            {key: 'theta_vs_q',
+              yTitle: '$q_y$ (rad/s)', xTitle: '$\\theta$ (rad)',
+              sliceInfo: '$\\theta$–$q_y$ plane with $z = 1$ m, rest $= 0$',
+              ticks: {x: ['$-\\pi$','$0$','$\\pi$'], y: ['$-24$','$0$','$24$']}},
+            {key: 'phi_vs_p',
+              yTitle: '$q_x$ (rad/s)', xTitle: '$\\phi$ (rad)',
+              sliceInfo: '$\\phi$–$q_x$ plane with $z = 1$ m, rest $= 0$',
+              ticks: {x: ['$-\\pi$','$0$','$\\pi$'], y: ['$-24$','$0$','$24$']}},
+            {key: 'psi_vs_r',
+              yTitle: '$q_z$ (rad/s)', xTitle: '$\\psi$ (rad)',
+              sliceInfo: '$\\psi$–$q_z$ plane with $z = 1$ m, rest $= 0$',
+              ticks: {x: ['$-\\pi$','$0$','$\\pi$'], y: ['$-24$','$0$','$24$']}}
+          ]
+        },
+        {
+          label: 'Position',
+          pairs: [
+            {key: 'x_vs_xdot',
+              yTitle: '$\\dot{x}$ (m/s)', xTitle: '$x$ (m)',
+              sliceInfo: '$x$–$\\dot{x}$ plane with $z = 1$ m, rest $= 0$',
+              ticks: {x: ['$-1.8$','$0$','$1.8$'], y: ['$-3$','$0$','$3$']}},
+            {key: 'y_vs_ydot',
+              yTitle: '$\\dot{y}$ (m/s)', xTitle: '$y$ (m)',
+              sliceInfo: '$y$–$\\dot{y}$ plane with $z = 1$ m, rest $= 0$',
+              ticks: {x: ['$-1.8$','$0$','$1.8$'], y: ['$-3$','$0$','$3$']}},
+            {key: 'z_vs_zdot',
+              yTitle: '$\\dot{z}$ (m/s)', xTitle: '$z$ (m)',
+              sliceInfo: '$z$–$\\dot{z}$ plane with rest $= 0$',
+              ticks: {x: ['$0.1$','$1.5$','$3$'], y: ['$-3$','$0$','$3$']}}
+          ]
+        }
+      ],
+      stateLabel: '$(x, y, z, \\dot{x}, \\dot{y}, \\dot{z}, \\phi, \\theta, \\psi, q_x, q_y, q_z)$'
+    }
+  };
+
+  function findNearestTraj(trajs, target) {
+    var best = trajs[0], dist = Math.abs(trajs[0] - target);
+    for (var i = 1; i < trajs.length; i++) {
+      var d = Math.abs(trajs[i] - target);
+      if (d < dist) { best = trajs[i]; dist = d; }
+    }
+    return best;
+  }
+
+  function splitYTitle(title) {
+    if (!title) return '';
+    // Split "$\dot{\theta}$ (rad/s)" into symbol + unit on separate lines
+    var m = title.match(/^(.+?)(\s*\(.+\))$/);
+    if (m) return m[1] + '<br>' + m[2];
+    return title;
+  }
+
+  function buildGridHTML(key, cfg, pairs, titleHTML) {
+    var hasSplitGT = !!cfg.splitGT;
+    var nImgCols = hasSplitGT ? cfg.methods.length : (1 + cfg.methods.length);
+    var colTemplate = '6rem 30px repeat(' + nImgCols + ',1fr)';
+    var html = '';
+
+    if (hasSplitGT) {
+      // Sticky header with title + legend
+      html += '<div class="de-plot-sticky-header">';
+      if (titleHTML) html += titleHTML;
+      html += '<div class="de-plot-legend">'
+        + '<span><span class="de-legend-swatch de-swatch-suc"></span> Success</span> '
+        + '<span><span class="de-legend-swatch de-swatch-unc"></span> Uncertain</span> '
+        + '<span><span class="de-legend-swatch de-swatch-fail"></span> Failure</span>'
+        + '</div>';
+      html += '</div>';
+
+      // Single grid: GT row, then method headers + method images
+      html += '<div class="de-plot-grid" style="grid-template-columns:' + colTemplate + '">';
+      for (var p = 0; p < pairs.length; p++) {
+        var pair = pairs[p];
+        if (pair.sliceInfo) {
+          html += '<div class="de-slice-subheader" style="grid-column:1/-1">' + pair.sliceInfo + '</div>';
+        }
+        // GT heading
+        html += '<div class="de-plot-header" style="grid-column:1/-1;padding:0.5rem 0 0.25rem;padding-left:calc(6rem + 30px)">Ground Truth</div>';
+        var gtCol = Math.floor(nImgCols / 2) + 3;
+        // GT row: ylabel+yticks right-aligned in col before GT, GT image centered
+        html += '<div></div><div></div>';
+        for (var c = 0; c < nImgCols; c++) {
+          var col = c + 3;
+          if (col === gtCol - 1) {
+            // ylabel + yticks right-aligned, flush against GT image
+            html += '<div style="display:flex;align-items:stretch;justify-content:flex-end;gap:4px;align-self:stretch">';
+            html += '<div class="de-plot-label" style="align-self:center">' + splitYTitle(pair.yTitle) + '</div>';
+            if (pair.ticks) {
+              html += '<div class="de-ytick-cell">'
+                + '<span>' + pair.ticks.y[2] + '</span>'
+                + '<span>' + pair.ticks.y[1] + '</span>'
+                + '<span>' + pair.ticks.y[0] + '</span>'
+                + '</div>';
+            }
+            html += '</div>';
+          } else if (col === gtCol) {
+            html += '<div><img class="de-plot-img" src="' + cfg.dir + '/ground_truth/' + pair.key + '.png"></div>';
+          } else {
+            html += '<div></div>';
+          }
+        }
+        // GT xticks
+        if (pair.ticks) {
+          html += '<div></div><div></div>';
+          for (var c = 0; c < nImgCols; c++) {
+            if (c + 3 === gtCol) {
+              html += '<div class="de-xtick-cell">'
+                + '<span>' + pair.ticks.x[0] + '</span>'
+                + '<span>' + pair.ticks.x[1] + '</span>'
+                + '<span>' + pair.ticks.x[2] + '</span>'
+                + '</div>';
+            } else { html += '<div></div>'; }
+          }
+        }
+        // GT xtitle
+        if (pair.xTitle) {
+          html += '<div></div><div></div>';
+          for (var c = 0; c < nImgCols; c++) {
+            if (c + 3 === gtCol) {
+              html += '<div class="de-xaxis-title">' + pair.xTitle + '</div>';
+            } else { html += '<div></div>'; }
+          }
+        }
+        // Spacer
+        html += '<div style="grid-column:1/-1;height:1rem"></div>';
+        // Inline method column headers (directly above images)
+        html += '<div></div><div></div>';
+        for (var m = 0; m < cfg.methods.length; m++) {
+          html += '<div class="de-plot-header">' + cfg.methods[m].label + '</div>';
+        }
+        // Method images row: ylabel | yticks | m1 | m2 | m3
+        html += '<div class="de-plot-label">' + splitYTitle(pair.yTitle) + '</div>';
+        if (pair.ticks) {
+          html += '<div class="de-ytick-cell">'
+            + '<span>' + pair.ticks.y[2] + '</span>'
+            + '<span>' + pair.ticks.y[1] + '</span>'
+            + '<span>' + pair.ticks.y[0] + '</span>'
+            + '</div>';
+        } else { html += '<div></div>'; }
+        for (var m = 0; m < cfg.methods.length; m++) {
+          var id = 'plot-' + key + '-' + cfg.methods[m].key + '-' + pair.key;
+          html += '<div><img class="de-plot-img" id="' + id + '"></div>';
+        }
+        // Method xticks
+        if (pair.ticks) {
+          html += '<div></div><div></div>';
+          for (var c = 0; c < nImgCols; c++) {
+            html += '<div class="de-xtick-cell">'
+              + '<span>' + pair.ticks.x[0] + '</span>'
+              + '<span>' + pair.ticks.x[1] + '</span>'
+              + '<span>' + pair.ticks.x[2] + '</span>'
+              + '</div>';
+          }
+        }
+        // Method xtitle
+        if (pair.xTitle) {
+          html += '<div></div><div></div>';
+          html += '<div class="de-xaxis-title" style="grid-column:3/-1">' + pair.xTitle + '</div>';
+        }
+      }
+      html += '</div>';
+    } else {
+      // Standard layout: sticky header + image grid
+      html += '<div class="de-plot-sticky-header">';
+      if (titleHTML) html += titleHTML;
+      html += '<div class="de-plot-legend">'
+        + '<span><span class="de-legend-swatch de-swatch-suc"></span> Success</span> '
+        + '<span><span class="de-legend-swatch de-swatch-unc"></span> Uncertain</span> '
+        + '<span><span class="de-legend-swatch de-swatch-fail"></span> Failure</span>'
+        + '</div>';
+      html += '<div class="de-plot-grid" style="grid-template-columns:' + colTemplate + '; margin-bottom:0">';
+      html += '<div></div><div></div>';
+      html += '<div class="de-plot-header">Ground Truth</div>';
+      for (var m = 0; m < cfg.methods.length; m++) {
+        html += '<div class="de-plot-header">' + cfg.methods[m].label + '</div>';
+      }
+      html += '</div>';
+      html += '</div>';
+
+      // Image grid
+      html += '<div class="de-plot-grid" style="grid-template-columns:' + colTemplate + '">';
+      for (var p = 0; p < pairs.length; p++) {
+        var pair = pairs[p];
+        if (pair.sliceInfo) {
+          html += '<div class="de-slice-subheader" style="grid-column:1/-1">' + pair.sliceInfo + '</div>';
+        }
+        html += '<div class="de-plot-label">' + splitYTitle(pair.yTitle) + '</div>';
+        if (pair.ticks) {
+          html += '<div class="de-ytick-cell">'
+            + '<span>' + pair.ticks.y[2] + '</span>'
+            + '<span>' + pair.ticks.y[1] + '</span>'
+            + '<span>' + pair.ticks.y[0] + '</span>'
+            + '</div>';
+        } else { html += '<div></div>'; }
+        html += '<div><img class="de-plot-img" src="' + cfg.dir + '/ground_truth/' + pair.key + '.png"></div>';
+        for (var m = 0; m < cfg.methods.length; m++) {
+          var id = 'plot-' + key + '-' + cfg.methods[m].key + '-' + pair.key;
+          html += '<div><img class="de-plot-img" id="' + id + '"></div>';
+        }
+        if (pair.ticks) {
+          html += '<div></div><div></div>';
+          for (var c = 0; c < nImgCols; c++) {
+            html += '<div class="de-xtick-cell">'
+              + '<span>' + pair.ticks.x[0] + '</span>'
+              + '<span>' + pair.ticks.x[1] + '</span>'
+              + '<span>' + pair.ticks.x[2] + '</span>'
+              + '</div>';
+          }
+        }
+        if (pair.xTitle) {
+          html += '<div></div><div></div>';
+          html += '<div class="de-xaxis-title" style="grid-column:3/-1">' + pair.xTitle + '</div>';
+        }
+      }
+      html += '</div>';
+    }
+    return html;
+  }
+
+  function createImageGrid(key) {
+    var cfg = PLOT_CONFIG[key];
+    if (!cfg) return;
+
+    var tableDiv = document.getElementById('table-' + key);
+    var wrapper = document.createElement('div');
+    wrapper.className = 'de-plot-wrapper';
+    wrapper.id = 'plotwrap-' + key;
+
+    // Section title
+    var titleHTML = '<h5 class="de-plot-section-title">' + (cfg.title || 'Classification Slices') + '</h5>';
+    if (cfg.stateLabel) {
+      titleHTML += '<p class="de-plot-state-label">State: ' + cfg.stateLabel + '</p>';
+    }
+
+    // Flatten all pairs (from pairGroups or pairs)
+    var allPairs = getAllPairs(cfg);
+    wrapper.innerHTML = buildGridHTML(key, cfg, allPairs, titleHTML);
+
+    // Append at end of panel (after charts)
+    var panel = tableDiv.parentNode;
+    panel.appendChild(wrapper);
+
+    // Render KaTeX math in dynamically added content
+    if (typeof renderMathInElement === 'function') {
+      renderMathInElement(wrapper, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});
+    }
+
+    // Set sticky column-header offset to clear the panel header
+    requestAnimationFrame(function() {
+      var panelHeader = panel.querySelector('.de-panel-header');
+      var stickyHeader = wrapper.querySelector('.de-plot-sticky-header');
+      if (panelHeader && stickyHeader) {
+        stickyHeader.style.top = (panelHeader.offsetHeight - 1) + 'px';
+      }
+    });
+  }
+
+  function getAllPairs(cfg) {
+    if (cfg.pairGroups) {
+      var all = [];
+      for (var g = 0; g < cfg.pairGroups.length; g++) {
+        all = all.concat(cfg.pairGroups[g].pairs);
+      }
+      return all;
+    }
+    return cfg.pairs;
+  }
+
+  function updatePlots(key, traj) {
+    var cfg = PLOT_CONFIG[key];
+    if (!cfg) return;
+    var nearest = findNearestTraj(cfg.trajs, traj);
+    var pairs = getAllPairs(cfg);
+
+    for (var m = 0; m < cfg.methods.length; m++) {
+      for (var p = 0; p < pairs.length; p++) {
+        var img = document.getElementById('plot-' + key + '-' + cfg.methods[m].key + '-' + pairs[p].key);
+        if (img) {
+          img.src = cfg.dir + '/' + cfg.methods[m].key + '/' + pairs[p].key + '/traj_' + nearest + '.png';
+        }
+      }
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
     var keys = Object.keys(SYSTEMS);
     for (var k = 0; k < keys.length; k++) {
@@ -447,6 +847,7 @@
         var slider = document.getElementById('slider-' + key);
         slider.addEventListener('input', function() { renderPanel(key); });
         createSystemCharts(key);
+        createImageGrid(key);
         renderPanel(key);
       })(keys[k]);
     }

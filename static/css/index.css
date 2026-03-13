@@ -221,28 +221,37 @@ code.roa {
   font-family: 'CMU Typewriter Text', 'Courier New', monospace;
 }
 
-/* Sidebar Table of Contents */
-.toc-nav {
-  position: fixed;
-  top: 50%;
-  left: 2.5rem;
-  transform: translateY(-50%);
-  z-index: 100;
-  padding: 1.75rem 1.75rem;
-  max-width: 260px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s ease;
-  background: rgba(255, 255, 255, 0.7);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 10px;
+/* Sidebar Table of Contents — permanent sidebar */
+/* Scale: 190px at 1000px viewport → 260px at 1300px+ */
+:root {
+  --sidebar-w: clamp(190px, calc(23.333vw - 43.333px), 260px);
 }
 
-.toc-nav.is-visible {
-  opacity: 1;
-  pointer-events: auto;
+.toc-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: var(--sidebar-w);
+  max-width: var(--sidebar-w);
+  height: 100vh;
+  padding: 4rem 1.25rem 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: #fff;
+  border-right: 1px solid #e0e0e0;
+}
+
+.toc-heading {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #999;
+  margin-bottom: 1rem;
+  padding-left: 0.6rem;
 }
 
 .toc-list {
@@ -252,7 +261,7 @@ code.roa {
 }
 
 .toc-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   border-left: 2px solid transparent;
   padding-left: 0.6rem;
   transition: border-color 0.2s;
@@ -262,18 +271,16 @@ code.roa {
   margin-bottom: 0;
 }
 
-/* Active group: vertical bar along entire section */
 .toc-group.is-active-group {
   border-left-color: #999;
 }
 
-/* Default: all links muted grey (inactive) */
 .toc-link {
   display: block;
   text-decoration: none;
   color: #999;
   font-size: 0.95rem;
-  line-height: 1.4;
+  line-height: 1.5;
   padding: 0.3rem 0;
   transition: color 0.2s, border-color 0.2s;
   border-left: 2px solid transparent;
@@ -282,17 +289,16 @@ code.roa {
 }
 
 .toc-link.toc-top {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: #999;
   padding: 0.35rem 0;
   padding-left: 0;
   border-left: none;
   margin-left: 0;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.25rem;
 }
 
-/* Active group: top link and subsections become readable */
 .toc-group.is-active-group > .toc-top {
   color: #363636;
 }
@@ -301,7 +307,6 @@ code.roa {
   color: #777;
 }
 
-/* The currently active subsection link */
 .toc-link.is-active {
   color: #000;
   border-left-color: #3273dc;
@@ -312,7 +317,6 @@ code.roa {
   color: #3273dc;
 }
 
-/* Hover: always allow hover highlight */
 .toc-link:hover {
   color: #3273dc;
 }
@@ -323,25 +327,103 @@ code.roa {
   padding: 0 0 0 0.6rem;
 }
 
-@media screen and (max-width: 1700px) {
+/* Shift all content right for sidebar — symmetric padding in right area */
+body > section.hero,
+body > section.section,
+#sec-method > section,
+#sec-evaluation > section,
+footer.footer {
+  padding-left: calc(var(--sidebar-w) + 1.5rem);
+  padding-right: 1.5rem;
+}
+
+body > section.hero.is-light,
+#sec-method > section.hero.is-light,
+#sec-evaluation > section.hero.is-light {
+  background: linear-gradient(to right, #fff calc(var(--sidebar-w) + 1px), whitesmoke calc(var(--sidebar-w) + 1px));
+}
+
+/* Scale ToC text at narrower sidebar widths */
+@media screen and (min-width: 1000px) and (max-width: 1299px) {
+  .toc-link {
+    font-size: 0.82rem;
+    padding: 0.2rem 0;
+  }
+  .toc-link.toc-top {
+    font-size: 0.92rem;
+  }
+  .toc-group {
+    margin-bottom: 1.25rem;
+  }
+  .toc-nav {
+    padding: 3rem 0.75rem 2rem 1.25rem;
+  }
+}
+
+/* Hide sidebar on small screens, remove content offset */
+@media screen and (max-width: 999px) {
   .toc-nav {
     display: none;
+  }
+
+  body > section.hero,
+  body > section.section,
+  #sec-method > section,
+  #sec-evaluation > section,
+  footer.footer {
+    padding-left: 1.5rem;
+  }
+
+  body > section.hero.is-light,
+  #sec-method > section.hero.is-light,
+  #sec-evaluation > section.hero.is-light {
+    background: whitesmoke;
+  }
+
+  .de-plot-wrapper {
+    max-width: 900px;
+    padding-right: 0;
+  }
+
+  .de-plot-section-title,
+  .de-plot-state-label,
+  .de-plot-legend,
+  .de-slice-subheader {
+    padding-left: 0;
+  }
+
+  .de-plot-sticky-header {
+    margin-right: 0;
+    padding-right: 0;
   }
 }
 
 /* Data Efficiency Interactive Panels */
 .de-panel {
-  border: 1px solid #dbdbdb;
-  border-radius: 8px;
-  padding: 1rem 1.25rem;
+  border: none;
+  border-radius: 0;
+  padding: 1rem 0;
   background: #fff;
+  overflow: visible;
+}
+
+.de-panel-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  margin: -1rem 0 0.75rem;
+  padding: 0.75rem 0 0.5rem;
+  border-radius: 0;
 }
 
 .de-slider-container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin: 0.75rem 0 0.25rem;
+  margin: 0.75rem auto 0.25rem;
+  max-width: 500px;
 }
 
 .de-slider-bound {
@@ -398,6 +480,8 @@ code.roa {
 .de-table {
   font-size: 1.05rem;
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   border-collapse: collapse;
 }
 
@@ -460,6 +544,148 @@ code.roa {
   color: #888;
   text-align: center;
   margin-top: 0.75rem;
+}
+
+/* Plot image grids */
+.de-plot-wrapper {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e0e0e0;
+  max-width: calc(900px + 6rem + 30px);
+  padding-right: calc(6rem + 30px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.de-plot-grid {
+  display: grid;
+  gap: 4px 6px;
+  align-items: center;
+  margin: 0 auto 8px;
+  max-width: 900px;
+}
+
+.de-plot-label {
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: right;
+  padding-right: 8px;
+  color: #444;
+  line-height: 1.2;
+}
+
+.de-plot-header {
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: center;
+  color: #444;
+  padding: 2px 0;
+}
+
+.de-plot-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 6px 0 10px;
+  margin-bottom: 8px;
+  margin-right: calc(-6rem - 30px);
+  padding-right: calc(6rem + 30px);
+}
+
+.de-plot-section-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #444;
+  text-align: center;
+  margin-bottom: 0.25rem;
+  padding-left: calc(6rem + 30px);
+}
+
+.de-plot-state-label {
+  font-size: 0.9rem;
+  color: #777;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  padding-left: calc(6rem + 30px);
+}
+
+.de-slice-info {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #888;
+  line-height: 1.2;
+}
+
+.de-ytick-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  align-self: stretch;
+  padding-right: 3px;
+  font-size: 0.7rem;
+  color: #666;
+}
+
+.de-xtick-cell {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #666;
+  padding-top: 1px;
+}
+
+.de-plot-img {
+  width: 100%;
+  display: block;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  aspect-ratio: 328 / 203;
+  object-fit: fill;
+}
+
+.de-plot-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  font-size: 1rem;
+  color: #555;
+  margin: 0.25rem 0 0.5rem;
+  padding-left: calc(6rem + 30px);
+}
+
+.de-legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  vertical-align: middle;
+  margin-right: 3px;
+  border: 1px solid #ccc;
+}
+
+.de-swatch-suc { background-color: #fae622; }
+.de-swatch-unc { background-color: #d1d1d1; }
+.de-swatch-fail { background-color: #410351; }
+
+.de-slice-subheader {
+  font-size: 1rem;
+  color: #555;
+  text-align: center;
+  padding: 0.6rem 0 0.3rem;
+  font-weight: 600;
+  padding-left: calc(6rem + 30px);
+}
+
+.de-xaxis-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  color: #444;
+  padding: 2px 0 8px;
 }
 
 
